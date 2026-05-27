@@ -1,5 +1,10 @@
 import time, datetime
 import requests.packages.urllib3
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 requests.packages.urllib3.disable_warnings()
 from flask import Flask
@@ -8,8 +13,11 @@ import requests
 import json
 
 
-botEmail = "botvati@webex.bot"
-accessToken = "MDU4ODc1NWEtZjhiNS00NjQ0LWI2NTctZTg2NDEwN2EzNDJlNWRmOTM0MjAtNjEx_P0A1_fff8f2b4-6d3d-477f-882d-6fee59a6f298"  # Bot's access token
+botEmail = os.getenv('WEBEX_BOT_EMAIL')
+accessToken = os.getenv('WEBEX_ACCESS_TOKEN')
+naverClientId = os.getenv('NAVER_CLIENT_ID')
+naverClientSecret = os.getenv('NAVER_CLIENT_SECRET')
+
 host = "https://api.ciscospark.com/v1/"
 headers = {"Authorization": "Bearer %s" % accessToken, "Content-Type": "application/json"}
 
@@ -25,7 +33,7 @@ def get_tasks():
         email = request.json.get('data').get('personEmail')
         print ("email =", email)
 
-        if email == "botvati@webex.bot":
+        if email == botEmail:
             return("")
 
         messageId = request.json.get('data').get('id')
@@ -43,8 +51,8 @@ def get_tasks():
 
         headers1 = {
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'X-Naver-Client-Id': '',
-            'X-Naver-Client-Secret': '',
+            'X-Naver-Client-Id': naverClientId,
+            'X-Naver-Client-Secret': naverClientSecret,
         }
 
 
@@ -68,8 +76,8 @@ def get_tasks():
 
         headers2 = {
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'X-Naver-Client-Id': '',
-            'X-Naver-Client-Secret': '',
+            'X-Naver-Client-Id': naverClientId,
+            'X-Naver-Client-Secret': naverClientSecret,
         }
 
         data2 = {
